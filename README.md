@@ -9,20 +9,8 @@ open source cheminformatics software.
 ## Execution environment
 You will need: -
 
--   Java
 -   Conda
--   Groovy (v2.4)
 -   Python
--   An operating system that supports symbolic links
-
->   It is vital that you install and setup a Java installation (especially by
-    also setting `JAVA_HOME` correctly) _before_ you install groovy. Observed
-    on Windows 7. If you do not groovy assumes a 32-bit environment and
-    then cannot call into a 64-bit java. 
-
-Although the project is based on [Gradle], which is Groovy-based,
-you will need to install **Groovy**. We've tested this framework using Groovy
-`v2.4.11`.
 
 The pipelines are based on the [RDKit] Open-Source Cheminformatics Software
 and are best executed from within a suitably configured [Conda] environment.
@@ -68,4 +56,6 @@ and upload them from the `src/python` directory: -
     
 ---
 
+[Conda]: https://conda.io/docs/
 [RDKit]: http://www.rdkit.org
+[PEP-440]: https://www.python.org/dev/peps/pep-0440/
