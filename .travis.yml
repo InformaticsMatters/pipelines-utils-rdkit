@@ -1,6 +1,6 @@
 ---
 
-# The pipelines-utils Travis CI/CD configuration.
+# The pipelines-utils-rdkit Travis CI/CD configuration.
 # Here we concentrate on the src/python part of the repository.
 # where we run coverage testing and then deploy when tagged.
 #
