@@ -19,7 +19,7 @@ os:
 # Our tags for PyPI distributions will be of the form `pypi-1.0.1`.
 stages:
 - name: test
-  if not tag is present
+  if: not tag is present
 - name: deploy
   if: tag =~ ^pypi*$ and branch = master
 
