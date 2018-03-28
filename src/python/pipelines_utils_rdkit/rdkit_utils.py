@@ -22,6 +22,7 @@ from rdkit.Chem import AllChem
 from sanifix import fix_mol
 
 from pipelines_utils import utils
+from pipelines_utils.StreamJsonListLoader import StreamJsonListLoader
 
 
 def default_open_input_output(inputDef, inputFormat, outputDef, defaultOutput,
@@ -64,10 +65,13 @@ def default_open_input_sdf(inputDef):
     return input, suppl
 
 
-def default_open_input_smiles(inputDef, delimiter='\t', smilesColumn=0, nameColumn=1, titleLine=False):
-    """Open the input as a file of smiles (possibly gzipped if ending with .gz) according to RDKit's SmilesMolSupplier
+def default_open_input_smiles(inputDef, delimiter='\t', smilesColumn=0,
+                              nameColumn=1, titleLine=False):
+    """Open the input as a file of smiles (possibly gzipped if ending with .gz)
+    according to RDKit's SmilesMolSupplier
 
-    :param inputDef: The name of the file. If None then STDIN is used (and assumed not to be gzipped)
+    :param inputDef: The name of the file. If None then STDIN is used
+                     (and assumed not to be gzipped)
     """
     if inputDef:
         input = utils.open_file(inputDef)
@@ -83,7 +87,8 @@ def default_open_input_smiles(inputDef, delimiter='\t', smilesColumn=0, nameColu
 
 
 def open_smarts(filename):
-    """Very simple smarts parser that expects smarts expression (and nothing else) on each line (no header)"""
+    """Very simple smarts parser that expects smarts expression
+    (and nothing else) on each line (no header)"""
     f = open(filename)
     count = 0
     for line in f:
@@ -95,10 +100,13 @@ def open_smarts(filename):
 
 
 def default_open_input_json(inputDef, lazy=True):
-    """Open the given input as JSON array of Squonk MoleculeObjects
-    :param inputDef: The name of the input file, or None if to use STDIN. If filename ends with .gz will be gunzipped
-    :param lazy: Use lazy loading of the JSON. If True will allow handling of large datasets without being loaded into memory,
-    but may be less robust and will be slower.
+    """Open the given input as JSON array of Squonk MoleculeObjects.
+
+    :param inputDef: The name of the input file, or None if to use STDIN.
+                     If filename ends with .gz will be gunzipped
+    :param lazy: Use lazy loading of the JSON. If True will allow handling of
+                 large datasets without being loaded into memory,
+                 but may be less robust and will be slower.
     """
     if inputDef:
         if inputDef.lower().endswith('.gz'):
@@ -114,7 +122,9 @@ def default_open_input_json(inputDef, lazy=True):
     return input, suppl
 
 
-def default_open_output(outputDef, defaultOutput, outputFormat, compress=True, thinOutput=False, valueClassMappings=None, datasetMetaProps=None, fieldMetaProps=None):
+def default_open_output(outputDef, defaultOutput, outputFormat, compress=True,
+                        thinOutput=False, valueClassMappings=None,
+                        datasetMetaProps=None, fieldMetaProps=None):
     if not outputFormat:
         utils.log("No output format specified - using sdf")
         outputFormat = 'sdf'
@@ -126,7 +136,8 @@ def default_open_output(outputDef, defaultOutput, outputFormat, compress=True, t
     if outputFormat == 'sdf':
         output,writer = default_open_output_sdf(outputDef, outputBase, thinOutput, compress)
     elif outputFormat == 'json':
-        output,writer = default_open_output_json(outputDef, outputBase, thinOutput, compress, valueClassMappings, datasetMetaProps, fieldMetaProps)
+        output,writer = default_open_output_json(outputDef, outputBase, thinOutput, compress,
+                                                 valueClassMappings, datasetMetaProps, fieldMetaProps)
     else:
         raise ValueError('Unsupported output format')
     return output,writer,outputBase
@@ -135,9 +146,11 @@ def default_open_output(outputDef, defaultOutput, outputFormat, compress=True, t
 def default_open_input_json(inputDef, lazy=True):
     """Open the given input as JSON array of Squonk MoleculeObjects
 
-    :param inputDef: The name of the input file, or None if to use STDIN. If filename ends with .gz will be gunzipped
-    :param lazy: Use lazy loading of the JSON. If True will allow handling of large datasets without being loaded into memory,
-    but may be less robust and will be slower.
+    :param inputDef: The name of the input file, or None if to use STDIN.
+                     If filename ends with .gz will be gunzipped
+    :param lazy: Use lazy loading of the JSON. If True will allow handling of
+                 large datasets without being loaded into memory,
+                 but may be less robust and will be slower.
     """
     if inputDef:
         if inputDef.lower().endswith('.gz'):
@@ -167,7 +180,8 @@ def default_open_output(outputDef, defaultOutput, outputFormat,
     if outputFormat == 'sdf':
         output,writer = default_open_output_sdf(outputDef, outputBase, thinOutput, compress)
     elif outputFormat == 'json':
-        output,writer = default_open_output_json(outputDef, outputBase, thinOutput, compress, valueClassMappings, datasetMetaProps, fieldMetaProps)
+        output,writer = default_open_output_json(outputDef, outputBase, thinOutput, compress,
+                                                 valueClassMappings, datasetMetaProps, fieldMetaProps)
     else:
         raise ValueError('Unsupported output format')
     return output,writer,outputBase
@@ -175,7 +189,7 @@ def default_open_output(outputDef, defaultOutput, outputFormat,
 
 def default_open_output_sdf(outputDef, outputBase, thinOutput, compress):
 
-    output = open_output(outputDef, 'sdf', compress)
+    output = utils.open_output(outputDef, 'sdf', compress)
 
     if thinOutput:
         writer = ThinSDWriter(output)
@@ -189,9 +203,10 @@ def default_open_output_json(outputDef, outputBase, thinOutput,
                              fieldMetaProps):
 
     # this writes the metadata that Squonk needs
-    write_squonk_datasetmetadata(outputBase, thinOutput, valueClassMappings, datasetMetaProps, fieldMetaProps)
+    utils.write_squonk_datasetmetadata(outputBase, thinOutput, valueClassMappings,
+                                       datasetMetaProps, fieldMetaProps)
 
-    output = open_output(outputDef, 'data', compress)
+    output = utils.open_output(outputDef, 'data', compress)
 
     if thinOutput:
         writer = ThinJsonWriter(output)
@@ -210,7 +225,7 @@ def read_single_molecule(filename, index=1, format=None):
         mol = Chem.MolFromMolBlock(file.read())
         file.close()
     elif format == 'sdf' or filename.lower().endswith('.sdf') or filename.lower().endswith('.sdf.gz'):
-        file = utils.(filename)
+        file = utils.open_file(filename)
         supplier = Chem.ForwardSDMolSupplier(file)
         for i in range(0,index):
             if supplier.atEnd():
@@ -313,7 +328,8 @@ class ThickJsonWriter:
         self.file.write('[')
         self.count = 0
 
-    def write(self, mol, props=None, includeStereo=True, confId=-1, kekulize=True, forceV3000=False, format='mol'):
+    def write(self, mol, props=None, includeStereo=True, confId=-1,
+              kekulize=True, forceV3000=False, format='mol'):
         d = {}
         if format == 'mol':
             d['source'] = Chem.MolToMolBlock(mol, includeStereo=includeStereo, confId=confId, kekulize=kekulize, forceV3000=forceV3000)
