@@ -16,8 +16,8 @@
 
 import argparse
 from rdkit.Chem import Descriptors
-from pipelines_utils import utils
-import mol_utils
+from pipelines_utils import parameter_utils, utils
+import rdkit_utils, mol_utils
 
 
 ### start function definitions #########################################
@@ -78,7 +78,7 @@ def main():
     # WARNING: thin output is not appropriate when using --fragment
     parser.add_argument('--thin', action='store_true', help='Thin output mode')
     parser.add_argument('-q', '--quiet', action='store_true', help='Quiet mode - suppress reporting reason for filtering')
-    utils.add_default_io_args(parser)
+    parameter_utils.add_default_io_args(parser)
     args = parser.parse_args()
     utils.log("Filter Args: ", args)
 
@@ -93,7 +93,7 @@ def main():
         for f in args.delete:
             field_renames[f] = None
         
-    input,suppl = utils.default_open_input(args.input, args.informat)
+    input,suppl = rdkit_utils.default_open_input(args.input, args.informat)
 
     if args.chunksize:
         chunkNum = 1
@@ -102,9 +102,9 @@ def main():
         else:
             output_base = 'filter'
         output_base_chunk = output_base + str(chunkNum).zfill(args.digits)
-        output,writer,output_base_chunk = utils.default_open_output(output_base_chunk, output_base_chunk, args.outformat, compress=not args.no_gzip)
+        output,writer,output_base_chunk = rdkit_utils.default_open_output(output_base_chunk, output_base_chunk, args.outformat, compress=not args.no_gzip)
     else:
-        output,writer,output_base_chunk = utils.default_open_output(args.output, "filter", args.outformat, compress=not args.no_gzip)
+        output,writer,output_base_chunk = rdkit_utils.default_open_output(args.output, "filter", args.outformat, compress=not args.no_gzip)
         output_base = output_base_chunk
 
     utils.log("Writing to " + output_base_chunk)
@@ -129,7 +129,7 @@ def main():
                 chunkNum += 1
                 output_chunk_base = output_base + str(chunkNum).zfill(args.digits)
                 utils.log("Writing to " + output_chunk_base)
-                output,writer,output_chunk_base = utils.default_open_output(output_chunk_base, output_chunk_base, args.outformat, compress=not args.no_gzip)
+                output,writer,output_chunk_base = rdkit_utils.default_open_output(output_chunk_base, output_chunk_base, args.outformat, compress=not args.no_gzip)
 
         for from_name in field_renames:
             to_name = field_renames[from_name]
@@ -159,4 +159,3 @@ def main():
     
 if __name__ == "__main__":
     main()
-

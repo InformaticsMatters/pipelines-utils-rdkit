@@ -17,7 +17,7 @@
 import argparse
 
 from pipelines_utils import utils
-
+import rdkit_utils
 
 def main():
 
@@ -42,7 +42,7 @@ def main():
     utils.log("Base:", base)
 
 
-    input,output,suppl,writer,output_base = utils.default_open_input_output(args.input, "sdf", args.output, base, "json")
+    input,output,suppl,writer,output_base = rdkit_utils.default_open_input_output(args.input, "sdf", args.output, base, "json")
     if args.exclude:
         excludes = args.exclude.split(",")
         utils.log("Excluding", excludes)
@@ -73,4 +73,3 @@ def main():
     
 if __name__ == "__main__":
     main()
-

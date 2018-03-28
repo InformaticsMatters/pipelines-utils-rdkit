@@ -16,15 +16,15 @@
 
 import argparse
 
-from pipelines_utils import utils
-
+from pipelines_utils import parameter_utils, utils
+import rdkit_utils
 
 def main():
 
     ### command line args definitions #########################################
 
     parser = argparse.ArgumentParser(description='RDKit Input Splitter')
-    utils.add_default_input_args(parser)
+    parameter_utils.add_default_input_args(parser)
     parser.add_argument('-o', '--output', required=True, help="Directory name for output files (no extension).")
     parser.add_argument('-f', '--field', required=True, help="field to use to split input. Output files will have the name of this field's value")
     parser.add_argument('--meta', action='store_true', help='Write metadata and metrics files')
@@ -41,7 +41,7 @@ def split(input, informat, fieldName, outputBase, writeMetrics):
     is determined by the fieldName parameter
     """
 
-    input,suppl = utils.default_open_input(input, informat)
+    input,suppl = rdkit_utils.default_open_input(input, informat)
 
     i=0
     written=0
@@ -61,7 +61,7 @@ def split(input, informat, fieldName, outputBase, writeMetrics):
                 writer = writers[s]
             else:
                 name = outputBase + s
-                output, writer = utils.default_open_output_sdf(name, outputBase, False, False)
+                output, writer = rdkit_utils.default_open_output_sdf(name, outputBase, False, False)
                 filenames.append(name + '.sdf')
                 outputs.append(output)
                 writers[s] = writer

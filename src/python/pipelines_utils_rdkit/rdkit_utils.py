@@ -19,15 +19,20 @@ from __future__ import print_function
 import sys, gzip, json, uuid
 from rdkit import Chem
 from rdkit.Chem import AllChem
-from rdkit_utils.sanifix import fix_mol
+from sanifix import fix_mol
 
 
-def default_open_input_output(inputDef, inputFormat, outputDef, defaultOutput, outputFormat, thinOutput=False, valueClassMappings=None,
+def default_open_input_output(inputDef, inputFormat, outputDef, defaultOutput,
+                              outputFormat, thinOutput=False, valueClassMappings=None,
                               datasetMetaProps=None, fieldMetaProps=None):
     """Default approach to handling the inputs and outputs"""
     input, suppl = default_open_input(inputDef, inputFormat)
-    output,writer,outputBase = default_open_output(outputDef, defaultOutput, outputFormat, thinOutput=thinOutput,
-                                                   valueClassMappings=valueClassMappings, datasetMetaProps=datasetMetaProps, fieldMetaProps=fieldMetaProps)
+    output,writer,outputBase =\
+        default_open_output(outputDef, defaultOutput, outputFormat,
+                            thinOutput=thinOutput,
+                            valueClassMappings=valueClassMappings,
+                            datasetMetaProps=datasetMetaProps,
+                            fieldMetaProps=fieldMetaProps)
     return input,output,suppl,writer,outputBase
 
 
@@ -70,7 +75,8 @@ def default_open_input_smiles(inputDef, delimiter='\t', smilesColumn=0, nameColu
     txt = input.read()
     input.close()
     suppl = Chem.SmilesMolSupplier()
-    suppl.SetData(txt, delimiter=delimiter, smilesColumn=smilesColumn, nameColumn=nameColumn, titleLine=titleLine)
+    suppl.SetData(txt, delimiter=delimiter, smilesColumn=smilesColumn,
+                  nameColumn=nameColumn, titleLine=titleLine)
     return suppl
 
 
@@ -145,7 +151,9 @@ def default_open_input_json(inputDef, lazy=True):
     return input, suppl
 
 
-def default_open_output(outputDef, defaultOutput, outputFormat, compress=True, thinOutput=False, valueClassMappings=None, datasetMetaProps=None, fieldMetaProps=None):
+def default_open_output(outputDef, defaultOutput, outputFormat,
+                        compress=True, thinOutput=False, valueClassMappings=None,
+                        datasetMetaProps=None, fieldMetaProps=None):
     if not outputFormat:
         log("No output format specified - using sdf")
         outputFormat = 'sdf'
@@ -174,7 +182,9 @@ def default_open_output_sdf(outputDef, outputBase, thinOutput, compress):
     return output, writer
 
 
-def default_open_output_json(outputDef, outputBase, thinOutput, compress, valueClassMappings, datasetMetaProps, fieldMetaProps):
+def default_open_output_json(outputDef, outputBase, thinOutput,
+                             compress, valueClassMappings, datasetMetaProps,
+                             fieldMetaProps):
 
     # this writes the metadata that Squonk needs
     write_squonk_datasetmetadata(outputBase, thinOutput, valueClassMappings, datasetMetaProps, fieldMetaProps)
