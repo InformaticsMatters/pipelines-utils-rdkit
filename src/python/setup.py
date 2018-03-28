@@ -13,7 +13,7 @@ def get_long_description():
 setup(
 
     name='im-pipelines-utils-rdkit',
-    version='1.0.0',
+    version='1.1.0',
     author='Alan Christie',
     author_email='achristie@informaticsmatters.com',
     url='https://github.com/InformaticsMatters/pipelines-utils-rdkit',
@@ -28,7 +28,8 @@ setup(
 
     # Essential dependencies
     install_requires=[
-        'future >= 0.16.0'
+        'future >= 0.16.0',
+        'im-pipelines-utils >= 2.2.0, < 3.0.0'
     ],
     # Supported Python versions
     # 2.7 and 3.5 or better

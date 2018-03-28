@@ -22,33 +22,26 @@ from rdkit.Chem import AllChem
 from rdkit_utils.sanifix import fix_mol
 
 
-def log(*args, **kwargs):
-    """
-    Log output to STDERR
-    """
-    utils_independent.log(args, kwargs)
-
-
-def add_default_input_args(parser):
-    utils_independent.add_default_input_args(parser)
-
-def add_default_output_args(parser):
-    utils_independent.add_default_output_args(parser)
-
-def add_default_io_args(parser):
-    utils_independent.add_default_io_args(parser)
-
-
 def default_open_input_output(inputDef, inputFormat, outputDef, defaultOutput, outputFormat, thinOutput=False, valueClassMappings=None,
                               datasetMetaProps=None, fieldMetaProps=None):
     """Default approach to handling the inputs and outputs"""
-    return utils_independent.default_open_input_output(inputDef, inputFormat, outputDef, defaultOutput, outputFormat,
-                                                       thinOutput=thinOutput, valueClassMappings=valueClassMappings,
-                                                       datasetMetaProps=datasetMetaProps, fieldMetaProps=fieldMetaProps)
+    input, suppl = default_open_input(inputDef, inputFormat)
+    output,writer,outputBase = default_open_output(outputDef, defaultOutput, outputFormat, thinOutput=thinOutput,
+                                                   valueClassMappings=valueClassMappings, datasetMetaProps=datasetMetaProps, fieldMetaProps=fieldMetaProps)
+    return input,output,suppl,writer,outputBase
 
 
 def default_open_input(inputDef, inputFormat):
-    return utils_independent.default_open_input(inputDef, inputFormat)
+    if not inputDef and not inputFormat:
+        raise ValueError('Must specify either an input file name or an input format (or both)')
+    elif inputFormat == 'sdf' or (inputDef and (inputDef.lower().endswith('.sdf') or inputDef.lower().endswith('.sdf.gz'))):
+        input, suppl = default_open_input_sdf(inputDef)
+    elif inputFormat == 'json' or (inputDef and (inputDef.lower().endswith('.data') or inputDef.lower().endswith('.data.gz'))):
+        input, suppl = default_open_input_json(inputDef)
+    else:
+        raise ValueError('Unsupported input format')
+
+    return input, suppl
 
 
 def default_open_input_sdf(inputDef):
@@ -81,10 +74,6 @@ def default_open_input_smiles(inputDef, delimiter='\t', smilesColumn=0, nameColu
     return suppl
 
 
-def open_file(filename):
-    """Open the file gunzipping it if it ends with .gz"""
-    return utils_independent.open_file(filename)
-
 def open_smarts(filename):
     """Very simple smarts parser that expects smarts expression (and nothing else) on each line (no header)"""
     f = open(filename)
@@ -99,44 +88,40 @@ def open_smarts(filename):
 
 def default_open_input_json(inputDef, lazy=True):
     """Open the given input as JSON array of Squonk MoleculeObjects
-
     :param inputDef: The name of the input file, or None if to use STDIN. If filename ends with .gz will be gunzipped
     :param lazy: Use lazy loading of the JSON. If True will allow handling of large datasets without being loaded into memory,
     but may be less robust and will be slower.
     """
-    return utils_independent.default_open_input_json(inputDef, lazy=lazy)
+    if inputDef:
+        if inputDef.lower().endswith('.gz'):
+            input = gzip.open(inputDef)
+        else:
+            input = open(inputDef, 'r')
+    else:
+        input = sys.stdin
+    if lazy:
+        suppl = generate_mols_from_json(StreamJsonListLoader(input))
+    else:
+        suppl = generate_mols_from_json(json.load(input))
+    return input, suppl
 
 
 def default_open_output(outputDef, defaultOutput, outputFormat, compress=True, thinOutput=False, valueClassMappings=None, datasetMetaProps=None, fieldMetaProps=None):
+    if not outputFormat:
+        log("No output format specified - using sdf")
+        outputFormat = 'sdf'
+    if not outputDef:
+        outputBase = defaultOutput
+    else:
+        outputBase = outputDef
 
-    return utils_independent.default_open_output(outputDef, defaultOutput, outputFormat, compress=compress, thinOutput=thinOutput,
-                                                 valueClassMappings=valueClassMappings, datasetMetaProps=datasetMetaProps, fieldMetaProps=fieldMetaProps)
-
-
-def create_simple_writer(outputDef, defaultOutput, outputFormat, fieldNames, compress=True, valueClassMappings=None, datasetMetaProps=None, fieldMetaProps=None):
-    """Create a simple writer suitable for writing flat data e.g. as BasicObject or TSV"""
-    return utils_independent.create_simple_writer(outputDef, defaultOutput, outputFormat, fieldNames, compress=compress,
-                                                  valueClassMappings=valueClassMappings, datasetMetaProps=datasetMetaProps, fieldMetaProps=fieldMetaProps)
-
-
-def open_output(basename, ext, compress):
-    return utils_independent.open_output(basename, ext, compress)
-
-
-def write_squonk_datasetmetadata(outputBase, thinOutput, valueClassMappings, datasetMetaProps, fieldMetaProps):
-    """This is a temp hack to write the minimal metadata that Squonk needs.
-    Will needs to be replaced with something that allows something more complete to be written.
-
-    :param outputBase: Base name for the file to write to
-    :param thinOutput: Write only new data, not structures. Result type will be BasicObject
-    :param valueClasses: A dict that describes the Java class of the value properties (used by Squonk)
-    :param datasetMetaProps: A dict with metadata properties that describe the datset as a whole.
-            The keys used for these metadata are up to the user, but common ones include source, description, created, history.
-    :param fieldMetaProps: A list of dicts with the additional field metadata. Each dict has a key named fieldName whose value
-            is the name of the field being described, and a key name values wholes values is a map of metadata properties.
-            The keys used for these metadata are up to the user, but common ones include source, description, created, history.
-    """
-    utils_independent.write_squonk_datasetmetadata(outputBase, thinOutput, valueClassMappings, datasetMetaProps, fieldMetaProps)
+    if outputFormat == 'sdf':
+        output,writer = default_open_output_sdf(outputDef, outputBase, thinOutput, compress)
+    elif outputFormat == 'json':
+        output,writer = default_open_output_json(outputDef, outputBase, thinOutput, compress, valueClassMappings, datasetMetaProps, fieldMetaProps)
+    else:
+        raise ValueError('Unsupported output format')
+    return output,writer,outputBase
 
 
 def default_open_input_json(inputDef, lazy=True):
@@ -201,15 +186,6 @@ def default_open_output_json(outputDef, outputBase, thinOutput, compress, valueC
     else:
         writer = ThickJsonWriter(output)
     return output,writer
-
-
-def write_metrics(baseName, values):
-    """Write the metrics data
-
-    :param baseName: The base name of the output files. e.g. extensions will be appended to this base name
-    :param values dictionary of values to write
-    """
-    return utils_independent.write_metrics(baseName, values)
 
 
 def read_single_molecule(filename, index=1, format=None):
@@ -313,16 +289,6 @@ def generate_mols_from_json(input):
             log("Failed to create molecule - skipping. Data was ", item)
             continue
         yield mol
-
-
-def generate_molecule_object_dict(source, format, values):
-    """Generate a dictionary that represents a Squonk MoleculeObject when writen as JSON
-
-    :param source: Molecules in molfile or smiles format
-    :param format: The format of the molecule. Either 'mol' or 'smiles'
-    :param values: Optional dict of values (properties) for the MoleculeObject
-    """
-    return utils_independent.generate_molecule_object_dict(source, format, values)
 
 
 def generate_2d_coords(mol):
