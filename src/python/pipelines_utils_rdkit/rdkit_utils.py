@@ -21,6 +21,8 @@ from rdkit import Chem
 from rdkit.Chem import AllChem
 from sanifix import fix_mol
 
+from pipelines_utils import utils
+
 
 def default_open_input_output(inputDef, inputFormat, outputDef, defaultOutput,
                               outputFormat, thinOutput=False, valueClassMappings=None,
@@ -55,7 +57,7 @@ def default_open_input_sdf(inputDef):
     :param inputDef: The name of the file. If None then STDIN is used (and assumed not to be gzipped)
     """
     if inputDef:
-        input = open_file(inputDef)
+        input = utils.open_file(inputDef)
     else:
         input = sys.stdin
     suppl = Chem.ForwardSDMolSupplier(input)
@@ -68,7 +70,7 @@ def default_open_input_smiles(inputDef, delimiter='\t', smilesColumn=0, nameColu
     :param inputDef: The name of the file. If None then STDIN is used (and assumed not to be gzipped)
     """
     if inputDef:
-        input = open_file(inputDef)
+        input = utils.open_file(inputDef)
     else:
         input = sys.stdin
     # SmilesMolSupplier is a bit strange as it can't accept a file like object!
@@ -114,7 +116,7 @@ def default_open_input_json(inputDef, lazy=True):
 
 def default_open_output(outputDef, defaultOutput, outputFormat, compress=True, thinOutput=False, valueClassMappings=None, datasetMetaProps=None, fieldMetaProps=None):
     if not outputFormat:
-        log("No output format specified - using sdf")
+        utils.log("No output format specified - using sdf")
         outputFormat = 'sdf'
     if not outputDef:
         outputBase = defaultOutput
@@ -155,7 +157,7 @@ def default_open_output(outputDef, defaultOutput, outputFormat,
                         compress=True, thinOutput=False, valueClassMappings=None,
                         datasetMetaProps=None, fieldMetaProps=None):
     if not outputFormat:
-        log("No output format specified - using sdf")
+        utils.log("No output format specified - using sdf")
         outputFormat = 'sdf'
     if not outputDef:
         outputBase = defaultOutput
@@ -204,11 +206,11 @@ def read_single_molecule(filename, index=1, format=None):
     """
     mol = None
     if format == 'mol' or filename.lower().endswith('.mol') or filename.lower().endswith('.mol.gz'):
-        file = open_file(filename)
+        file = utils.open_file(filename)
         mol = Chem.MolFromMolBlock(file.read())
         file.close()
     elif format == 'sdf' or filename.lower().endswith('.sdf') or filename.lower().endswith('.sdf.gz'):
-        file = open_file(filename)
+        file = utils.(filename)
         supplier = Chem.ForwardSDMolSupplier(file)
         for i in range(0,index):
             if supplier.atEnd():
@@ -249,7 +251,7 @@ def parse_mol_simple(my_type, txt):
         # Assumes that smiles is the first column -> and splits on chemaxon
         mol = Chem.MolFromSmiles(txt.split()[0].split(":")[0])
     if mol is None:
-        log('Failed to parse mol', txt)
+        utils.log('Failed to parse mol', txt)
     return mol
 
 
@@ -296,7 +298,7 @@ def generate_mols_from_json(input):
         mol = create_mol_from_props(item)
         if not mol:
             # TODO - get a count of the errors and report
-            log("Failed to create molecule - skipping. Data was ", item)
+            utils.log("Failed to create molecule - skipping. Data was ", item)
             continue
         yield mol
 
@@ -334,7 +336,7 @@ class ThickJsonWriter:
             d['uuid'] = str(uuid.uuid4())
         if allProps:
             d['values'] = allProps
-        #log("Mol:",d)
+        #utils.log("Mol:",d)
         json_str = json.dumps(d)
         if self.count > 0:
             self.file.write(',')
