@@ -7,7 +7,7 @@
     // Test basic startup
     test_help = [
 
-        command: '''python -m rdkit_utils.splitter -h''',
+        command: '''python -m pipelines_utils_rdkit.splitter -h''',
 
     ],
 

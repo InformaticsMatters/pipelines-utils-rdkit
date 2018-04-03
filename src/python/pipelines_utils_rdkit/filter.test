@@ -8,7 +8,7 @@
     test_in_to_out = [
 
         command: '''gunzip -c ${PIN}Kinase_inhibs.sdf.gz |
-                    python -m rdkit_utils.filter
+                    python -m pipelines_utils_rdkit.filter
                     --hacmin 25 --hacmax 30 -if sdf''',
 
         see: [ 'No output format specified - using sdf',

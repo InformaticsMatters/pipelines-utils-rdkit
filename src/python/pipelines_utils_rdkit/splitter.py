@@ -17,7 +17,7 @@
 import argparse
 
 from pipelines_utils import parameter_utils, utils
-import rdkit_utils
+from pipelines_utils_rdkit import rdkit_utils
 
 def main():
 
