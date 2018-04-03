@@ -1,7 +1,7 @@
 # Additional modules we depend on.
 # Required from within an RDKIT Conda environment
 
-im-pipelines-utils == 2.0.*
+im-pipelines-utils == 2.2.*
 
 matplotlib == 2.1.1
 molvs == 0.0.9
