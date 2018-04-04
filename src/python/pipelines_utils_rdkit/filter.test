@@ -7,6 +7,8 @@
     // Testing filter.py reading from STDIN and writing to STDOUT
     test_in_to_out = [
 
+        exclude: [ 'Windows.*' ],
+
         command: '''gunzip -c ${PIN}Kinase_inhibs.sdf.gz |
                     python -m pipelines_utils_rdkit.filter
                     --hacmin 25 --hacmax 30 -if sdf''',
