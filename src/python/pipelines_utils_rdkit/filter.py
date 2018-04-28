@@ -102,9 +102,9 @@ def main():
         else:
             output_base = 'filter'
         output_base_chunk = output_base + str(chunkNum).zfill(args.digits)
-        output,writer,output_base_chunk = rdkit_utils.default_open_output(output_base_chunk, output_base_chunk, args.outformat, compress=not args.no_gzip)
+        output,writer,output_base_chunk = rdkit_utils.default_open_output(output_base_chunk, output_base_chunk, args.outformat, thinOutput=args.thin, compress=not args.no_gzip)
     else:
-        output,writer,output_base_chunk = rdkit_utils.default_open_output(args.output, "filter", args.outformat, compress=not args.no_gzip)
+        output,writer,output_base_chunk = rdkit_utils.default_open_output(args.output, "filter", args.outformat, thinOutput=args.thin, compress=not args.no_gzip)
         output_base = output_base_chunk
 
     utils.log("Writing to " + output_base_chunk)
@@ -129,7 +129,7 @@ def main():
                 chunkNum += 1
                 output_chunk_base = output_base + str(chunkNum).zfill(args.digits)
                 utils.log("Writing to " + output_chunk_base)
-                output,writer,output_chunk_base = rdkit_utils.default_open_output(output_chunk_base, output_chunk_base, args.outformat, compress=not args.no_gzip)
+                output,writer,output_chunk_base = rdkit_utils.default_open_output(output_chunk_base, output_chunk_base, args.outformat, thinOutput=args.thin, compress=not args.no_gzip)
 
         for from_name in field_renames:
             to_name = field_renames[from_name]
