@@ -23,37 +23,10 @@ installed as normal:
 >   The module utilities should support both Python 2 and 3 but we recommend
     any modules/pipelines you write support both flavours.
 
-### Publishing the im-pipelines-utils-rdkit package to PyPI
-The utilities are published to PyPI for easy installation
-(normally automatically by the Travis CI/CD framework
-when the repository is tagged on master).
+# Publishing the im-pipelines-utils-rdkit package to PyPI
+This project's structure is similar to `pipelines-utils`. For details
+on how to publish to pip refer to its documentation.
 
-If you are going to publish the utilities yourself (not recommended) you will
-need our PyPI account details. For Informatics Matters you should add the
-following to your `~/.pypirc` file (or create one if you don't have one): -
-
-    [pypi]
-    username: informaticsmatters
-    password: <password>
-
-To publish a new set of Python utilities you then simply need to build
-and upload them from the `src/python` directory: -
-
-    $ pip install -r requirments.txt
-    $ python setup.py bdist_wheel
-    $ twine upload dist/*
-
->   Before publishing (or tagging for automatic publishing) you must ensure
-    that the package version is new (currently defined in `setup.py`).
-    If you re-publish a package PyPI will respond with an error. Once you
-    have released version 1.0.0 you cannot release it again. Ever.
-    
->   For acceptable version number formatting you should follow [PEP-440].
-
->   The Travis CI/CD service (controlled by the `.travis.yml` file)
-    automatically publishes the PyPI package when the `master` branch is tagged
-    using label begins `pypi-`
-    
 ---
 
 [Conda]: https://conda.io/docs/

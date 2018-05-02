@@ -2,7 +2,6 @@
 # Required from within an RDKIT Conda environment
 
 im-pipelines-utils == 2.2.*
-im-pipelines-utils-rdkit == 1.4.*
 
 matplotlib == 2.1.1
 molvs == 0.0.9
