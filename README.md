@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/InformaticsMatters/pipelines-utils-rdkit.svg?branch=master)](https://travis-ci.org/InformaticsMatters/pipelines-utils-rdkit)
-[![Coverage Status](https://coveralls.io/repos/github/InformaticsMatters/pipelines-utils-rdkit/badge.svg?branch=master)](https://coveralls.io/github/InformaticsMatters/pipelines-utils-rdkit?branch=master)
+[![PyPI version](https://badge.fury.io/py/im-pipelines-utils-rdkit.svg)](https://badge.fury.io/py/im-pipelines-utils-rdkit)
 
 # Pipelines Utils (RDKit)
 A repository of common **Informatics Matters** _Pipeline_ utilities shared
