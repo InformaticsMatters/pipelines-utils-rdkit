@@ -21,6 +21,8 @@ from rdkit import Chem
 from rdkit.Chem import AllChem
 from sanifix import fix_mol
 
+from MolFromTypedColumnReader import MolFromTypedColumnReader
+
 from pipelines_utils import utils
 from pipelines_utils.StreamJsonListLoader import StreamJsonListLoader
 
@@ -46,6 +48,8 @@ def default_open_input(inputDef, inputFormat):
         input, suppl = default_open_input_sdf(inputDef)
     elif inputFormat == 'json' or (inputDef and (inputDef.lower().endswith('.data') or inputDef.lower().endswith('.data.gz'))):
         input, suppl = default_open_input_json(inputDef)
+    elif inputFormat == 'smiles':
+        input, suppl = default_open_input_typed_smiles(inputDef)
     else:
         raise ValueError('Unsupported input format')
 
@@ -84,6 +88,24 @@ def default_open_input_smiles(inputDef, delimiter='\t', smilesColumn=0,
     suppl.SetData(txt, delimiter=delimiter, smilesColumn=smilesColumn,
                   nameColumn=nameColumn, titleLine=titleLine)
     return suppl
+
+
+def default_open_input_typed_smiles(inputDef):
+    """Open the input as a file of typed column text containing SMILES
+    (possibly gzipped if ending with .gz).
+
+    The user will need to initialise() this object once it's been created
+    to provide an optional header and other parameters.
+
+    :param inputDef: The name of the file, or None if to use STDIN.
+                     If filename ends with .gz will be gunzipped
+    """
+    if inputDef:
+        input = utils.open_file(inputDef)
+    else:
+        input = sys.stdin
+    suppl = MolFromTypedColumnReader(input)
+    return input, suppl
 
 
 def open_smarts(filename):

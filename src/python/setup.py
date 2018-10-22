@@ -13,7 +13,7 @@ def get_long_description():
 setup(
 
     name='im-pipelines-utils-rdkit',
-    version='1.4.1',
+    version='1.5.0',
     author='Alan Christie',
     author_email='achristie@informaticsmatters.com',
     url='https://github.com/InformaticsMatters/pipelines-utils-rdkit',
