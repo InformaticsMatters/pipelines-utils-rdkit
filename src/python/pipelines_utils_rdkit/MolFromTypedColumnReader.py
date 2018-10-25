@@ -9,14 +9,14 @@ from pipelines_utils.TypedColumnReader import TypedColumnReader
 
 
 class MolFromTypedColumnReader(object):
-    """Creates molecule from a typed column file, exposing the results
+    """Creates molecules from a typed column file, exposing the results
     as an iterator.
     """
 
     def __init__(self, smiles_file):
         """Initialises the module with a smiles_file.
 
-        :param smiles_file: The typed CSV file. smiles_file can be any object
+        :param smiles_file: The typed column file. smiles_file can be any object
                             which supports the iterator protocol and returns a
                             string each time its next() method is called
         """
@@ -35,7 +35,7 @@ class MolFromTypedColumnReader(object):
         like the file column separator, type separator and header for files
         that do not have one.
 
-        This method must be called prior to iterating through the molecules.
+        This method must be called prior to iterating through the file.
 
         :param column_sep: The column separator
         :param type_sep: The separator of column name and its type definition
@@ -77,12 +77,13 @@ class MolFromTypedColumnReader(object):
             # The end
             raise StopIteration
 
-        # Create a MOL from he smiles string.
+        # Create a MOL from the smiles string.
         smiles = row_content[self._smiles_column_name]
         mol = Chem.MolFromSmiles(smiles)
         if mol:
             # Now set molecule properties
-            # based on all the other parts of the row...
+            # based on all the other parts of the row.
+            # These can be floats, ints, strings etc.
             for name in row_content:
                 if name != self._smiles_column_name:
                     value = row_content[name]
@@ -90,7 +91,7 @@ class MolFromTypedColumnReader(object):
                         mol.SetDoubleProp(name, value)
                     elif type(value) is int:
                         mol.SetIntProp(name, value)
-                    else:
+                    elif type(value) is str:
                         mol.SetProp(name, value)
 
         # Molecule and properties ready for release...
