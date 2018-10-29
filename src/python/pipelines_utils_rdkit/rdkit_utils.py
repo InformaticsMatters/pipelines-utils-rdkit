@@ -455,3 +455,51 @@ class ThickSDWriter:
 
     def flush(self):
         self.writer.flush()
+
+# class TabWriter:
+#
+#     def __init__(self, file, propertiesToWrite=None, includeStereo=True, kekulize=False):
+#         self.file = file
+#         self.count = 0
+#         self.includeStereo = includeStereo
+#         self.kekulize = kekulize
+#         self.propertiesToWrite = propertiesToWrite
+#         if propertiesToWrite is None:
+#             utils.log("WARNING: propertiesToWrite not defined. Output may be misformatted if the same properties are not present for each record")
+#
+#     def writeHeader(self):
+#         if self.propertiesToWrite is None:
+#             raise ValueError("Cannot write header if propertiesToWrite is not set")
+#         line = "SMILES"
+#         for prop in self.propertiesToWrite:
+#             line += "\t" + prop
+#         self.file.write(line + "\n")
+#
+#
+#     def write(self, mol, props=None, confId=-1):
+#         if self.kekulize:
+#             Chem.Kekulize(mol)
+#         line = Chem.MolToSmiles(mol, isomericSmiles=self.includeStereo, kekuleSmiles=self.kekulize)
+#         allProps = mol.GetPropsAsDict()
+#         if props:
+#             allProps.update(props)
+#
+#         if self.propertiesToWrite is None:
+#             propsToUse = allProps
+#         else:
+#             propsToUse = self.propertiesToWrite
+#
+#         for prop in propsToUse:
+#             line += line + "\t"
+#             val = allProps[prop]
+#             if val is not None:
+#                 line += str(val)
+#
+#         self.file.write(line + "\n")
+#         self.count += 1
+#
+#     def close(self):
+#         self.file.close()
+#
+#     def flush(self):
+#         self.file.flush()
