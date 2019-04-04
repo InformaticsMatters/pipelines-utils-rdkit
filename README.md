@@ -2,7 +2,7 @@
 [![PyPI version](https://badge.fury.io/py/im-pipelines-utils-rdkit.svg)](https://badge.fury.io/py/im-pipelines-utils-rdkit)
 
 # Pipelines Utils (RDKit)
-A repository of common **Informatics Matters** _Pipeline_ utilities shared
+A repository of common **Informatics Matters** _pipelines_ utilities shared
 between a number of _Pipelines_ repositories that rely on the RDKit
 open source cheminformatics software.
 
@@ -10,12 +10,12 @@ open source cheminformatics software.
 You will need: -
 
 -   Conda
--   Python
+-   Python (ideally v3)
 
 The pipelines are based on the [RDKit] Open-Source Cheminformatics Software
 and are best executed from within a suitably configured [Conda] environment.
 You may need to install some additional modules before you can run the tests,
-these dependencies are captured in our own `requiremenmts.txt` file and
+these dependencies are captured in our own `requirements.txt` file and
 installed as normal:
 
     $ pip install -r requiremenmts.txt
@@ -31,4 +31,3 @@ on how to publish to pip refer to its documentation.
 
 [Conda]: https://conda.io/docs/
 [RDKit]: http://www.rdkit.org
-[PEP-440]: https://www.python.org/dev/peps/pep-0440/
