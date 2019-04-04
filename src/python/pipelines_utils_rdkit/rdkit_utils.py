@@ -19,9 +19,8 @@ from __future__ import print_function
 import sys, gzip, json, uuid
 from rdkit import Chem
 from rdkit.Chem import AllChem
-from sanifix import fix_mol
-
-from MolFromTypedColumnReader import MolFromTypedColumnReader
+from .sanifix import fix_mol
+from .MolFromTypedColumnReader import MolFromTypedColumnReader
 
 from pipelines_utils import utils
 from pipelines_utils.StreamJsonListLoader import StreamJsonListLoader
