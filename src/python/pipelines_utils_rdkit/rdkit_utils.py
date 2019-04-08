@@ -131,7 +131,7 @@ def default_open_input_json(inputDef, lazy=True):
     """
     if inputDef:
         if inputDef.lower().endswith('.gz'):
-            input = gzip.open(inputDef)
+            input = gzip.open(inputDef, 'rt')
         else:
             input = open(inputDef, 'r')
     else:
@@ -175,7 +175,7 @@ def default_open_input_json(inputDef, lazy=True):
     """
     if inputDef:
         if inputDef.lower().endswith('.gz'):
-            input = gzip.open(inputDef)
+            input = gzip.open(inputDef, 'rt')
         else:
             input = open(inputDef, 'r')
     else:
