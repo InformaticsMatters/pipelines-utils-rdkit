@@ -56,7 +56,7 @@ class MolFromTypedColumnReader(object):
         """
         return self
 
-    def next(self):
+    def __next__(self):
         """Creates the next molecule from the SMILES file.
 
         Additional columns in the file are added as suitably typed
@@ -97,6 +97,9 @@ class MolFromTypedColumnReader(object):
         # Molecule and properties ready for release...
         # But it might also be 'None'
         return mol
+
+    def next(self):
+        return self.__next__()
 
     def __del__(self):
         self._tcr = None
