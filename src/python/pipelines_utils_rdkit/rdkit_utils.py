@@ -77,7 +77,7 @@ def default_open_input_smiles(inputDef, delimiter='\t', smilesColumn=0,
                      (and assumed not to be gzipped)
     """
     if inputDef:
-        input = utils.open_file(inputDef)
+        input = utils.open_file(inputDef, as_text=True)
     else:
         input = sys.stdin
     # SmilesMolSupplier is a bit strange as it can't accept a file like object!
@@ -100,7 +100,7 @@ def default_open_input_typed_smiles(inputDef):
                      If filename ends with .gz will be gunzipped
     """
     if inputDef:
-        input = utils.open_file(inputDef)
+        input = utils.open_file(inputDef, as_text=True)
     else:
         input = sys.stdin
     suppl = MolFromTypedColumnReader(input)
