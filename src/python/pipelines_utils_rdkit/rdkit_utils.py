@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2018 Informatics Matters Ltd.
+# Copyright 2019 Informatics Matters Ltd.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -63,7 +63,13 @@ def default_open_input_sdf(inputDef):
     if inputDef:
         input = utils.open_file(inputDef)
     else:
-        input = sys.stdin
+        # We need to use the (Python 3) stdin.buffer
+        # (a binary representation of the input stream)
+        # for RDKit in Python 3.
+        if sys.version_info[0] >= 3:
+            input = sys.stdin.buffer
+        else:
+            input = sys.stdin
     suppl = Chem.ForwardSDMolSupplier(input)
     return input, suppl
 
