@@ -251,13 +251,13 @@ def read_single_molecule(filename, index=1, format=None):
         for i in range(0,index):
             if supplier.atEnd():
                 break
-            mol = supplier.next()
+            mol = next(supplier)
         file.close()
     elif format == 'json' or filename.lower().endswith('.data') or filename.lower().endswith('.data.gz'):
         input, suppl = default_open_input_json(filename)
         for i in range(0,index):
             try:
-                mol = suppl.next()
+                mol = next(suppl)
             except StopIteration:
                 break
         input.close()
