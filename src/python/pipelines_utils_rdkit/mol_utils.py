@@ -56,9 +56,11 @@ def fragment(mol, mode, quiet=False):
         # copy the properties across
         for name in mol.GetPropNames():
             biggest_mol.SetProp(name, mol.GetProp(name))
-        name = mol.GetProp("_Name")
-        if name:
-            biggest_mol.SetProp("_Name", name)
+
+        # _Name is a magical property that is not in the ones returned by GetPropNames
+        if '_Name' in mol.GetPropNames():
+            biggest_mol.SetProp("_Name", mol.GetProp("_Name"))
+
         return biggest_mol
 
 def fragmentAndFingerprint(suppl, mols, fps, descriptor, fragmentMethod='hac', outputFragment=False, quiet=False):
