@@ -1,0 +1,11 @@
+# Additional modules we depend on for wider testing.
+# For example, the following dependencies are
+# required from within a lot of our RDKit-equipped Conda environments...
+
+im-pipelines-utils == 2.4.*
+
+matplotlib == 2.1.1
+molvs == 0.0.9
+scikit-learn == 0.19.1
+scipy == 1.0.0
+standardiser == 0.1.9
