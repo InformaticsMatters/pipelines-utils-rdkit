@@ -275,7 +275,16 @@ def read_single_molecule(filename, index=1, format=None):
 
 
 def parse_mol_simple(my_type, txt):
-    """Function to parse individual mols given a type"""
+    """Function to parse individual mols given a type.
+
+    :param my_type: A type definition (i.e. "mol" or "smiles")
+    :param txt: The textual definition of the molecule (i.e. a SMILES string)
+    :return: A mol instance or None if the molecule could not be compiled
+    """
+    # Ignore unexpected parameter values...
+    if my_type is None or not my_type or txt is None or not txt:
+        return None
+
     if my_type == "mol":
         # Try this way
         mol = Chem.MolFromMolBlock(txt.strip())
@@ -283,7 +292,7 @@ def parse_mol_simple(my_type, txt):
             mol = Chem.MolFromMolBlock(txt)
         if mol is None:
             mol = Chem.MolFromMolBlock("\n".join(txt.split("\n")[1:]))
-        # Now try to do sanidfix
+        # Now try to do sanifix
         if mol is None:
             mol = fix_mol(Chem.MolFromMolBlock(txt, False))
         # And again
@@ -293,7 +302,7 @@ def parse_mol_simple(my_type, txt):
         # Assumes that smiles is the first column -> and splits on chemaxon
         mol = Chem.MolFromSmiles(txt.split()[0].split(":")[0])
     if mol is None:
-        utils.log('Failed to parse mol', txt)
+        utils.log('Failed to parse mol "%s" for my_type %s' % (txt, my_type))
     return mol
 
 
