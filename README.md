@@ -15,10 +15,10 @@ You will need: -
 The pipelines are based on the [RDKit] Open-Source Cheminformatics Software
 and are best executed from within a suitably configured [Conda] environment.
 You may need to install some additional modules before you can run the tests,
-these dependencies are captured in our own `requirements.txt` file and
+these dependencies are captured in our own `example-requirements.txt` file and
 installed as normal:
 
-    $ pip install -r requiremenmts.txt
+    $ pip install -r example-requiremenmts.txt
 
 >   The module utilities should support both Python 2 and 3 but we recommend
     any modules/pipelines you write support both flavours.
