@@ -152,53 +152,9 @@ def default_open_input_json(inputDef, lazy=True):
 def default_open_output(outputDef, defaultOutput, outputFormat, compress=True,
                         thinOutput=False, valueClassMappings=None,
                         datasetMetaProps=None, fieldMetaProps=None):
-    if not outputFormat:
-        utils.log("No output format specified - using sdf")
-        outputFormat = 'sdf'
-    if not outputDef:
-        outputBase = defaultOutput
-    else:
-        outputBase = outputDef
 
-    if outputFormat == 'sdf':
-        output,writer = default_open_output_sdf(outputDef, outputBase, thinOutput, compress)
-    elif outputFormat == 'json':
-        output,writer = default_open_output_json(outputDef, outputBase, thinOutput, compress,
-                                                 valueClassMappings, datasetMetaProps, fieldMetaProps)
-    else:
-        raise ValueError('Unsupported output format')
-    return output,writer,outputBase
+    outputFormat = utils.determine_output_format(outputFormat)
 
-
-def default_open_input_json(inputDef, lazy=True):
-    """Open the given input as JSON array of Squonk MoleculeObjects
-
-    :param inputDef: The name of the input file, or None if to use STDIN.
-                     If filename ends with .gz will be gunzipped
-    :param lazy: Use lazy loading of the JSON. If True will allow handling of
-                 large datasets without being loaded into memory,
-                 but may be less robust and will be slower.
-    """
-    if inputDef:
-        if inputDef.lower().endswith('.gz'):
-            input = gzip.open(inputDef, 'rt')
-        else:
-            input = open(inputDef, 'r')
-    else:
-        input = sys.stdin
-    if lazy:
-        suppl = generate_mols_from_json(StreamJsonListLoader(input))
-    else:
-        suppl = generate_mols_from_json(json.load(input))
-    return input, suppl
-
-
-def default_open_output(outputDef, defaultOutput, outputFormat,
-                        compress=True, thinOutput=False, valueClassMappings=None,
-                        datasetMetaProps=None, fieldMetaProps=None):
-    if not outputFormat:
-        utils.log("No output format specified - using sdf")
-        outputFormat = 'sdf'
     if not outputDef:
         outputBase = defaultOutput
     else:
