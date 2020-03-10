@@ -1,7 +1,8 @@
+# Pipelines Utils (RDKit)
+
 [![Build Status](https://travis-ci.org/InformaticsMatters/pipelines-utils-rdkit.svg?branch=master)](https://travis-ci.org/InformaticsMatters/pipelines-utils-rdkit)
 [![PyPI version](https://badge.fury.io/py/im-pipelines-utils-rdkit.svg)](https://badge.fury.io/py/im-pipelines-utils-rdkit)
 
-# Pipelines Utils (RDKit)
 A repository of common **Informatics Matters** _pipelines_ utilities shared
 between a number of _Pipelines_ repositories that rely on the RDKit
 open source cheminformatics software.
@@ -23,7 +24,7 @@ installed as normal:
 >   The module utilities should support both Python 2 and 3 but we recommend
     any modules/pipelines you write support both flavours.
 
-# Publishing the im-pipelines-utils-rdkit package to PyPI
+## Publishing to PyPI
 This project's structure is similar to `pipelines-utils`. For details
 on how to publish to pip refer to its documentation.
 
