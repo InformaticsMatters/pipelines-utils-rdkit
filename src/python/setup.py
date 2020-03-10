@@ -13,11 +13,11 @@ def get_long_description():
 setup(
 
     name='im-pipelines-utils-rdkit',
-    version='1.5.10',
+    version='1.5.11',
     author='Alan Christie',
     author_email='achristie@informaticsmatters.com',
     url='https://github.com/InformaticsMatters/pipelines-utils-rdkit',
-    license='Copyright (C) 2018 Informatics Matters Ltd. All rights reserved.',
+    license='Copyright (C) 2020 Informatics Matters Ltd. All rights reserved.',
     description='Utilities for Informatics Matters Pipelines',
     long_description=get_long_description(),
     keywords='pipelines rdkit',

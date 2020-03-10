@@ -5,7 +5,7 @@
     version = 1,
 
     // Testing filter.py reading from STDIN and writing to STDOUT
-    test_in_to_out = [
+    test_in_to_out_hac = [
 
         exclude: [ 'Windows.*' ],
 
@@ -17,6 +17,33 @@
                'Filtered [1-9]\\d+ down to [1-9]\\d+ molecules']
 
     ],
+
+    test_in_to_out_rotb = [
+
+            exclude: [ 'Windows.*' ],
+
+            command: '''gunzip -c ${PIN}Kinase_inhibs.sdf.gz |
+                        python -m pipelines_utils_rdkit.filter
+                        --rotbmin 1 --rotbmax 3 -if sdf''',
+
+            see: [ 'No output format specified - using sdf',
+                   'Filtered [1-9]\\d+ down to [1-9]\\d+ molecules']
+
+    ],
+
+    test_in_to_out_logp = [
+
+                exclude: [ 'Windows.*' ],
+
+                command: '''gunzip -c ${PIN}Kinase_inhibs.sdf.gz |
+                            python -m pipelines_utils_rdkit.filter
+                            --logpmin 1 --logpmax 3 -if sdf''',
+
+                see: [ 'No output format specified - using sdf',
+                       'Filtered [1-9]\\d+ down to [1-9]\\d+ molecules']
+
+    ],
+
 
     test_transform = [
 
