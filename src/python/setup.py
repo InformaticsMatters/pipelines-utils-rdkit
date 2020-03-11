@@ -3,17 +3,23 @@
 
 # Setup module for the Python-based RDKit Pipelines Utilities.
 #
-# Mar 2018
+# The published version is "1.0.0"
+# or the value of the TRAVIS_TAG environment variable if set.
+#
+# Mar 2020
 
 from setuptools import setup, find_packages
+import os
+
 
 def get_long_description():
     return open('README.rst').read()
 
+
 setup(
 
     name='im-pipelines-utils-rdkit',
-    version='1.5.11',
+    version=os.environ.get('TRAVIS_TAG', '1.0.0'),
     author='Alan Christie',
     author_email='achristie@informaticsmatters.com',
     url='https://github.com/InformaticsMatters/pipelines-utils-rdkit',
@@ -49,7 +55,7 @@ setup(
     ],
 
     # Root of the test suite
-    test_suite = 'test',
+    test_suite='test',
 
     zip_safe=False,
 
