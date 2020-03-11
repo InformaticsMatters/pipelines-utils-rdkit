@@ -11,6 +11,7 @@
 from setuptools import setup, find_packages
 import os
 
+
 def get_long_description():
     return open('README.rst').read()
 
@@ -54,7 +55,7 @@ setup(
     ],
 
     # Root of the test suite
-    test_suite = 'test',
+    test_suite='test',
 
     zip_safe=False,
 

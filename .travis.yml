@@ -21,12 +21,6 @@ stages:
 - name: deploy
   if: tag is present
 
-# Run Travis on all branches
-# (normally it only runs on master)
-branches:
-  only:
-  - "/.*/"
-
 # Installation steps.
 # We have more than one requirements file and need to install
 # a mock version of dependent packages in order to run our tests.
