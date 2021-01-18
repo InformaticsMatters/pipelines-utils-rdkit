@@ -1,6 +1,7 @@
 # Pipelines Utils (RDKit)
 
-[![Build Status](https://travis-ci.com/InformaticsMatters/pipelines-utils-rdkit.svg?branch=master)](https://travis-ci.com/InformaticsMatters/pipelines-utils-rdkit)
+![build](https://github.com/InformaticsMatters/pipelines-utils-rdkit/workflows/build/badge.svg)
+
 [![PyPI version](https://badge.fury.io/py/im-pipelines-utils-rdkit.svg)](https://badge.fury.io/py/im-pipelines-utils-rdkit)
 
 A repository of common **Informatics Matters** _pipelines_ utilities shared
