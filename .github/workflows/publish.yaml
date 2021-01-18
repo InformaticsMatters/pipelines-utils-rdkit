@@ -13,7 +13,7 @@ name: publish
 # PYPI_USERNAME
 # PYPI_TOKEN
 #
-# GITHUB_TOKEN
+# DISPATCH_PIPELINES_TOKEN
 #
 # -----------
 # Environment (GitHub Environments)
