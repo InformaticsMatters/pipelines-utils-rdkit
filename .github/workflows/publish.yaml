@@ -56,4 +56,4 @@ jobs:
       with:
         repository: informaticsmatters/pipelines
         token: ${{ secrets.DISPATCH_PIPELINES_TOKEN }}
-        event-type: pypi-publish
+        event-type: pipelines-utils-rdkit
